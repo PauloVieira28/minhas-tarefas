@@ -1,20 +1,21 @@
 import styled from 'styled-components'
 import variables from '../../styles/variables'
 import * as enums from '../../utils/enums/task'
+import { Button } from '../../styles'
 
 type TagProps = {
-  priority?: enums.Priority
-  status?: enums.Status
-  params: 'status' | 'priority'
+  $priority?: enums.Priority
+  $status?: enums.Status
+  $params: 'status' | 'priority'
 }
 
 const backgroundColor = (props: TagProps): string => {
-  if (props.params === 'priority') {
-    if (props.priority === enums.Priority.IMPORTANTE) return variables.mustard
-    if (props.priority === enums.Priority.URGENTE) return variables.red
+  if (props.$params === 'priority') {
+    if (props.$priority === enums.Priority.IMPORTANTE) return variables.mustard
+    if (props.$priority === enums.Priority.URGENTE) return variables.red
   } else {
-    if (props.status === enums.Status.PENDENTE) return variables.yellow
-    if (props.status === enums.Status.CONCLUIDA) return variables.green
+    if (props.$status === enums.Status.PENDENTE) return variables.yellow
+    if (props.$status === enums.Status.CONCLUIDA) return variables.green
   }
   return '#ccc'
 }
@@ -25,12 +26,18 @@ export const CardTasks = styled.div`
   padding: 16px;
   margin-bottom: 32px;
   border-radius: 16px;
+
+  label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
 `
 
 export const Title = styled.h3`
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin-left: 8px;
 `
 
 export const Tag = styled.span<TagProps>`
@@ -61,21 +68,6 @@ export const Description = styled.textarea`
 export const SideBarActions = styled.div`
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 16px;
-`
-
-export const Button = styled.button`
-  font-size: 12px;
-  font-weight: bold;
-  color: #fff;
-  padding: 8px 14px;
-  cursor: pointer;
-  background-color: #2f3640;
-  border-radius: 8px;
-  margin-right: 8px;
-`
-
-export const ButtonSalve = styled(Button)`
-  background-color: ${variables.green};
 `
 
 export const ButtonCancelRemove = styled(Button)`

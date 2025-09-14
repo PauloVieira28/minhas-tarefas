@@ -18,7 +18,7 @@ const initialState: TasksState = {
     },
     {
       title: 'Estudar Typescript',
-      priority: enums.Priority.URGENTE,
+      priority: enums.Priority.NORMAL,
       status: enums.Status.CONCLUIDA,
       id: 2,
       description:
@@ -26,7 +26,7 @@ const initialState: TasksState = {
     },
     {
       title: 'Estudar React',
-      priority: enums.Priority.IMPORTANTE,
+      priority: enums.Priority.NORMAL,
       status: enums.Status.PENDENTE,
       id: 3,
       description:
@@ -46,9 +46,36 @@ const tasksSlice = createSlice({
       const indexTask = state.itens.findIndex((t) => t.id === action.payload.id)
 
       if (indexTask >= 0) state.itens[indexTask] = action.payload
+    },
+    register: (state, action: PayloadAction<Omit<TaskModels, 'id'>>) => {
+      const TaskExists = state.itens.find(
+        (t) => t.title.toLowerCase() === action.payload.title.toLowerCase()
+      )
+
+      if (TaskExists) {
+        alert('Ja existe uma tarefa com esse nome')
+      } else {
+        const lastTask = state.itens[state.itens.length - 1]
+        const newTask = {
+          ...action.payload,
+          id: lastTask ? lastTask.id + 1 : 1
+        }
+        state.itens.push(newTask)
+      }
+    },
+    AlterStatus: (
+      state,
+      action: PayloadAction<{ id: number; finished: boolean }>
+    ) => {
+      const indexTask = state.itens.findIndex((t) => t.id === action.payload.id)
+
+      if (indexTask >= 0)
+        state.itens[indexTask].status = action.payload.finished
+          ? enums.Status.CONCLUIDA
+          : enums.Status.PENDENTE
     }
   }
 })
 
-export const { remover, editing } = tasksSlice.actions
+export const { remover, editing, register, AlterStatus } = tasksSlice.actions
 export default tasksSlice.reducer

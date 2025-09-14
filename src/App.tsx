@@ -4,13 +4,28 @@ import ToDoList from './containers/ToDoList'
 import Storage from './store'
 import StyledGlobal, { Container } from './styles'
 
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import path from 'path'
+import Home from './Pages/Home'
+import Register from './Pages/Register'
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
+  {
+    path: '/new',
+    element: <Register />
+  }
+])
+
 function App() {
   return (
     <Provider store={Storage}>
       <StyledGlobal />
       <Container>
-        <Sidebar />
-        <ToDoList />
+        <RouterProvider router={router} />
       </Container>
     </Provider>
   )

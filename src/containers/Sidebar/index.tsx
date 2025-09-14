@@ -1,30 +1,69 @@
 import { useDispatch, useSelector } from 'react-redux'
 import CardFilter from '../CardFilter'
 import * as S from './styles'
-import { RootReducer } from '../../store'
-import { changeFilter } from '../../store/reducers/Filter'
+import { Button, Field } from '../../styles'
 
-const Sidebar = () => {
+import { RootReducer } from '../../store'
+import { changeTerm } from '../../store/reducers/Filter'
+import * as enums from '../../utils/enums/task'
+import { useNavigate } from 'react-router-dom'
+
+type Props = {
+  showFilters: boolean
+}
+
+const Sidebar = ({ showFilters }: Props) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const { term } = useSelector((state: RootReducer) => state.filter)
 
   return (
     <S.Aside>
       <div>
-        <S.Field
-          type="text"
-          placeholder="Buscar"
-          value={term}
-          onChange={(e) => dispatch(changeFilter(e.target.value))}
-        />
-        <S.Filters>
-          <CardFilter caption="Pendentes" counter={1} />
-          <CardFilter caption="Concluidas" counter={2} />
-          <CardFilter caption="Urgentes" counter={3} />
-          <CardFilter caption="Importantes" counter={4} />
-          <CardFilter caption="Normal" counter={5} />
-          <CardFilter ativo caption="todas" counter={10} />
-        </S.Filters>
+        {showFilters ? (
+          <>
+            <Field
+              type="text"
+              placeholder="Buscar"
+              value={term}
+              onChange={(e) => dispatch(changeTerm(e.target.value))}
+            />
+            <S.Filters>
+              <CardFilter
+                value={enums.Status.PENDENTE}
+                critery="status"
+                caption="Pendentes"
+              />
+
+              <CardFilter
+                value={enums.Status.CONCLUIDA}
+                critery="status"
+                caption="Concluidas"
+              />
+              <CardFilter
+                value={enums.Priority.URGENTE}
+                critery="priority"
+                caption="Urgentes"
+              />
+              <CardFilter
+                value={enums.Priority.IMPORTANTE}
+                critery="priority"
+                caption="Importantes"
+              />
+              <CardFilter
+                value={enums.Priority.NORMAL}
+                critery="priority"
+                caption="Normal"
+              />
+
+              <CardFilter critery="allFilters" caption="Todos" />
+            </S.Filters>
+          </>
+        ) : (
+          <Button onClick={() => navigate('/')}>
+            Voltar a lista de tarefas
+          </Button>
+        )}
       </div>
     </S.Aside>
   )
